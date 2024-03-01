@@ -1,25 +1,22 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
+
 import logo from "../assets/logo.jpg";
-import Cart from "./Cart";
-import CartModal from "./CartModal";
 import Button from "./Button";
 import { MealsContext } from "../store/meals-cart-context";
+import { ProgressContext } from "../store/progress-cart-context";
 
 export default function Header() {
   const { items } = useContext(MealsContext);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { openCart } = useContext(ProgressContext);
 
   const cartQuantity = items.length;
 
   function handleOpenCart() {
-    setModalIsOpen(true);
+    openCart();
   }
 
   return (
     <>
-      <CartModal open={modalIsOpen}>
-        <Cart />
-      </CartModal>
       <header id="main-header">
         <h1 id="title">
           <img src={logo} alt="Logo restaurant" />
