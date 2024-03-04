@@ -64,14 +64,6 @@ app.post("/orders", async (req, res) => {
   res.status(201).json({ message: "Order created!" });
 });
 
-app.use((req, res) => {
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-
-  res.status(404).json({ message: "Not found" });
-});
-
 app.get("/orders", async (req, res) => {
   try {
     const orders = await fs.readFile("./data/orders.json", "utf8");
@@ -82,3 +74,11 @@ app.get("/orders", async (req, res) => {
 });
 
 app.listen(3000);
+
+app.use((req, res) => {
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  res.status(404).json({ message: "Not found" });
+});

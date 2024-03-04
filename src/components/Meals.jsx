@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import MealItem from "./MealItem";
+import Loader from "./Loader";
 
 import { fetchAvailableMeals } from "../http";
 
@@ -16,7 +17,7 @@ export default function Meals() {
         setAvailableMeals(meals);
       } catch (error) {
         setError({
-          message: error.message || "Failed to fetch user places.",
+          message: error.message || "Failed to fetch meals.",
         });
       }
       setIsFetching(false);
@@ -27,14 +28,15 @@ export default function Meals() {
 
   return (
     <>
-      {isFetching && <p>Fetching meals...</p>}
-      {!isFetching && (
-        <ul id="meals">
-          {availableMeals.map((meal) => {
-            return <MealItem key={meal.id} meal={meal} />;
-          })}
-        </ul>
-      )}
+      <ul id="meals">
+        {error && <p>An error occured!</p>}
+        {!error && isFetching ? (
+          // <p>Fetching meals...</p>
+          <Loader />
+        ) : (
+          availableMeals.map((meal) => <MealItem key={meal.id} meal={meal} />)
+        )}
+      </ul>
     </>
   );
 }

@@ -3,12 +3,12 @@ import Button from "./Button";
 import CartModal from "./CartModal";
 import CartItem from "./CartItem";
 import { MealsContext } from "../store/meals-cart-context";
-import { currencyFormatter } from "../formatting";
+import { currencyFormatter } from "../util/formatting";
 import { ProgressContext } from "../store/progress-cart-context";
 
 export default function Cart({}) {
   const { items, addMealToCart, removeMealToCart } = useContext(MealsContext);
-  const { step, closeCart } = useContext(ProgressContext);
+  const { step, closeCart, openCheckout } = useContext(ProgressContext);
 
   const cartTotal = items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.price,
@@ -17,6 +17,10 @@ export default function Cart({}) {
 
   function handleCloseCart() {
     closeCart();
+  }
+
+  function handleOpenCheckout() {
+    openCheckout();
   }
 
   return (
@@ -47,7 +51,9 @@ export default function Cart({}) {
         <Button onlyText onClick={handleCloseCart}>
           Close
         </Button>
-        {items.length > 0 && <Button>Go to Checkout</Button>}
+        {items.length > 0 && (
+          <Button onClick={handleOpenCheckout}>Go to Checkout</Button>
+        )}
       </div>
     </CartModal>
   );
