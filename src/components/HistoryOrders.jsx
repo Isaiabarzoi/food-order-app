@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { fetchAvailableOrders } from "../http";
-import Loader from "./Loader";
-import Button from "./Button";
+import { useState } from "react";
+import Loader from "./UI/Loader";
+import Button from "./UI/Button";
 import HistoryItem from "./HistoryItem";
 import Meals from "./Meals";
 import useHttp from "../hooks/useHttp";

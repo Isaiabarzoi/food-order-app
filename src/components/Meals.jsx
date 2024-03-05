@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MealItem from "./MealItem";
-import Loader from "./Loader";
-import Button from "./Button";
+import Loader from "./UI/Loader";
+import Button from "./UI/Button";
 
 import HistoryOrders from "./HistoryOrders";
 import useHttp from "../hooks/useHttp";

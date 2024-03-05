@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import Button from "./Button";
-import CartModal from "./CartModal";
+import Button from "./UI/Button";
+import CartModal from "./UI/CartModal";
 import CartItem from "./CartItem";
 import { MealsContext } from "../store/meals-cart-context";
 import { currencyFormatter } from "../util/formatting";

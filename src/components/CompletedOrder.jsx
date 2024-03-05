@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import CartModal from "./CartModal";
+import CartModal from "./UI/CartModal";
 import { ProgressContext } from "../store/progress-cart-context";
-import Button from "./Button";
+import Button from "./UI/Button";
 
 export default function CompletedOrder({ onFinish }) {
   const { step } = useContext(ProgressContext);

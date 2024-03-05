@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
-import Button from "./Button";
-import CartModal from "./CartModal";
-import Input from "./Input";
+import Button from "./UI/Button";
+import CartModal from "./UI/CartModal";
+import Input from "./UI/Input";
 import CompletedOrder from "./CompletedOrder";
 import { ProgressContext } from "../store/progress-cart-context";
 import { MealsContext } from "../store/meals-cart-context";
