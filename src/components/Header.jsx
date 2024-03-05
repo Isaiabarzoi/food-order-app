@@ -1,9 +1,10 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import logo from "../assets/logo.jpg";
 import Button from "./Button";
 import { MealsContext } from "../store/meals-cart-context";
 import { ProgressContext } from "../store/progress-cart-context";
+import HistoryOrders from "./HistoryOrders";
 
 export default function Header() {
   const { items } = useContext(MealsContext);

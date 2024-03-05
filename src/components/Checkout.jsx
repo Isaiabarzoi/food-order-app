@@ -2,119 +2,85 @@ import { useContext, useState } from "react";
 import Button from "./Button";
 import CartModal from "./CartModal";
 import Input from "./Input";
+import CompletedOrder from "./CompletedOrder";
 import { ProgressContext } from "../store/progress-cart-context";
-import { updateMealsOrders } from "../http";
 import { MealsContext } from "../store/meals-cart-context";
+import useHttp from "../hooks/useHttp";
+
+const config = {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+};
 
 export default function Checkout() {
-  const { items } = useContext(MealsContext);
-  const { step, closeCheckout, openCompletedOrder } =
-    useContext(ProgressContext);
+  const { items, clearCart } = useContext(MealsContext);
+  const { step, closeCheckout } = useContext(ProgressContext);
 
-  const [formData, setFormData] = useState({
-    enteredName: "",
-    enteredEmail: "",
-    enteredStreet: "",
-    enteredPostalCode: "",
-    enteredCity: "",
-  });
-
-  function handleInputChange(e) {
-    const { name, value } = e.target;
-    setFormData((prevInputData) => {
-      return {
-        ...prevInputData,
-        [name]: value,
-      };
-    });
-  }
+  const { data, isLoading, error, sendRequest, clearData } = useHttp(
+    "http://localhost:3000/orders",
+    config
+  );
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const inputData = {
-      name: formData.enteredName,
-      email: formData.enteredEmail,
-      street: formData.enteredStreet,
-      "postal-code": formData.enteredPostalCode,
-      city: formData.enteredCity,
-    };
-    console.log(inputData);
-    console.log(items);
-    try {
-      await updateMealsOrders({ items: items, customer: inputData });
-    } catch (error) {
-      console.error("Failed to update orders:", error);
-    }
-    setFormData({
-      enteredName: "",
-      enteredEmail: "",
-      enteredStreet: "",
-      enteredPostalCode: "",
-      enteredCity: "",
-    });
-    openCompletedOrder();
+
+    const fd = new FormData(e.target);
+    const customerData = Object.fromEntries(fd.entries());
+
+    sendRequest(
+      JSON.stringify({
+        order: {
+          items: items,
+          customer: customerData,
+        },
+      })
+    );
+  }
+
+  function handleCheckout() {
+    closeCheckout();
+    clearCart();
+    clearData();
   }
 
   function handleClose() {
     closeCheckout();
   }
 
+  let actions = (
+    <>
+      <Button onlyText onClick={handleClose}>
+        Close
+      </Button>
+      <Button>Submit Order</Button>
+    </>
+  );
+
+  if (isLoading) {
+    actions = <span>Sending orders...</span>;
+  }
+
+  if (!error && data) {
+    return (
+      <CartModal open={step === "checkout"} onClose={handleCheckout}>
+        <CompletedOrder onFinish={handleCheckout} />
+      </CartModal>
+    );
+  }
+
   return (
-    <CartModal
-      open={step === "checkout"}
-      onClose={step == "checkout" ? handleClose : null}
-    >
-      <form>
+    <CartModal open={step === "checkout"} onClose={handleClose}>
+      <form onSubmit={handleSubmit}>
         <h2>Checkout</h2>
         <p>Total Amount: </p>
-        <Input
-          label="Full Name"
-          type="tex"
-          id="full-name"
-          name="enteredName"
-          value={formData.name}
-          onChange={handleInputChange}
-        />
-        <Input
-          label="E-Mail Adress"
-          type="email"
-          id="email"
-          name="enteredEmail"
-          value={formData.email}
-          onChange={handleInputChange}
-        />
-        <Input
-          label="Street"
-          type="text"
-          id="street"
-          name="enteredStreet"
-          value={formData.street}
-          onChange={handleInputChange}
-        />
+        <Input label="Full Name" type="text" id="name" />
+        <Input label="E-Mail Adress" type="email" id="email" />
+        <Input label="Street" type="text" id="street" />
         <div className="control-row">
-          <Input
-            label="Postal Code"
-            type="text"
-            id="postal-code"
-            name="enteredPostalCode"
-            value={formData.postalCode}
-            onChange={handleInputChange}
-          />
-          <Input
-            label="City"
-            type="text"
-            id="city"
-            name="enteredCity"
-            value={formData.city}
-            onChange={handleInputChange}
-          />
+          <Input label="Postal Code" type="text" id="postal-code" />
+          <Input label="City" type="text" id="city" />
         </div>
-        <p className="modal-actions">
-          <Button onlyText onClick={handleClose}>
-            Close
-          </Button>
-          <Button onClick={handleSubmit}>Submit Order</Button>
-        </p>
+        <p className="modal-actions">{actions}</p>
       </form>
     </CartModal>
   );

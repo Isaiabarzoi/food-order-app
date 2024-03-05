@@ -4,6 +4,7 @@ export const MealsContext = createContext({
   items: [],
   addMealToCart: (item) => {},
   removeMealToCart: (id) => {},
+  clearCart: (id) => {},
 });
 
 function shoppingCartReducer(state, action) {
@@ -50,6 +51,13 @@ function shoppingCartReducer(state, action) {
     };
   }
 
+  if (action.type === "CLEAR_CART") {
+    return {
+      ...state,
+      items: [],
+    };
+  }
+
   return state;
 }
 
@@ -73,10 +81,18 @@ export default function MealsContextProvider({ children }) {
     });
   }
 
+  function clearCart(id) {
+    shoppingCartDispatch({
+      type: "CLEAR_CART",
+      id,
+    });
+  }
+
   const ctxValue = {
     items: shoppingCartState.items,
     addMealToCart,
     removeMealToCart,
+    clearCart,
   };
 
   return (

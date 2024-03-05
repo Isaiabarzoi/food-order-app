@@ -6,8 +6,6 @@ export const ProgressContext = createContext({
   closeCart: () => {},
   openCheckout: () => {},
   closeCheckout: () => {},
-  openCompletedOrder: () => {},
-  closeCompletedOrder: () => {},
 });
 
 export default function ProgressContextProvider({ children }) {
@@ -29,22 +27,12 @@ export default function ProgressContextProvider({ children }) {
     setProgressStep("");
   }
 
-  function openCompletedOrder() {
-    setProgressStep("completed");
-  }
-
-  function closeCompletedOrder() {
-    setProgressStep("");
-  }
-
   const progressCtx = {
     step: progressStep,
     openCart,
     closeCart,
     openCheckout,
     closeCheckout,
-    openCompletedOrder,
-    closeCompletedOrder,
   };
 
   return (

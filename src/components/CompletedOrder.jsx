@@ -3,15 +3,11 @@ import CartModal from "./CartModal";
 import { ProgressContext } from "../store/progress-cart-context";
 import Button from "./Button";
 
-export default function CompletedOrder() {
-  const { step, closeCompletedOrder } = useContext(ProgressContext);
-
-  function handleCloseCompleteOrder() {
-    closeCompletedOrder();
-  }
+export default function CompletedOrder({ onFinish }) {
+  const { step } = useContext(ProgressContext);
 
   return (
-    <CartModal open={step === "completed"} onClose={handleCloseCompleteOrder}>
+    <>
       <h2>Success!</h2>
       <p>Your order was submitted successfully.</p>
       <p>
@@ -19,8 +15,8 @@ export default function CompletedOrder() {
         minutes.
       </p>
       <p>
-        <Button onClick={handleCloseCompleteOrder}>Okay</Button>
+        <Button onClick={onFinish}>Okay</Button>
       </p>
-    </CartModal>
+    </>
   );
 }
