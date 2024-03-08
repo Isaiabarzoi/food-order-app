@@ -5,6 +5,7 @@ import Button from "./UI/Button";
 
 import HistoryOrders from "./HistoryOrders";
 import useHttp from "../hooks/useHttp";
+import Error from "./Error";
 
 const config = {};
 
@@ -41,7 +42,7 @@ export default function Meals() {
   }
 
   if (error) {
-    return <p>Failed to fetch meals</p>;
+    return <Error title="Failed to fetch meals" message={error} />;
   }
 
   if (isLoading) {

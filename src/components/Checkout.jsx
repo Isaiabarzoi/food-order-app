@@ -3,6 +3,7 @@ import Button from "./UI/Button";
 import CartModal from "./UI/CartModal";
 import Input from "./UI/Input";
 import CompletedOrder from "./CompletedOrder";
+import Error from "./Error";
 import { ProgressContext } from "../store/progress-cart-context";
 import { MealsContext } from "../store/meals-cart-context";
 import useHttp from "../hooks/useHttp";
@@ -80,6 +81,9 @@ export default function Checkout() {
           <Input label="Postal Code" type="text" id="postal-code" />
           <Input label="City" type="text" id="city" />
         </div>
+
+        {error && <Error title="Failed to submit order" message={error} />}
+
         <p className="modal-actions">{actions}</p>
       </form>
     </CartModal>
